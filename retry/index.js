@@ -1,10 +1,10 @@
-const Request = require('./domain/request/Request');
+const { messageUSeCase } = require('./application/config/Configuration')
 
 module.exports = async function (context, req) {
     
-    const request = new Request("Mensaje enviado");
+    const message = await messageUSeCase.getMessage();
 
     context.res = {
-        body: request.message
+        body: message
     };
 }
