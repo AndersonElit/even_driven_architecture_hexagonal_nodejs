@@ -1,5 +1,7 @@
 
-class MessageUSeCase {
+const retries = process.env.RETRIES
+
+class MessageUseCase {
     constructor(messageClient) {
         this.messageClient = messageClient;
     }
@@ -8,6 +10,10 @@ class MessageUSeCase {
         return this.messageClient.getMessage();
     }
 
+    async retry() {
+
+    }
+
 }
 
-module.exports = MessageUSeCase;
+module.exports = MessageUseCase;

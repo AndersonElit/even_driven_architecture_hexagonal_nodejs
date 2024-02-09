@@ -1,10 +1,13 @@
 //const { messageUSeCase } = require('./application/config/Configuration')
 const MessageClient = require('./infrastructure/client/MessageClient');
 const MessageProducer = require('./infrastructure/producer/MessageProducer');
+const MessageConsumer = require('./infrastructure/consumer/MessageConsumer');
 
 module.exports = async function (context, req) {
     
     //const message = await messageUSeCase.getMessage();
+    const messageConsumer = new MessageConsumer();
+    messageConsumer.consume();
     const endpoint = 'http://localhost:8082/message';
     const messageClient = new MessageClient(endpoint);
     const response = await messageClient.getMessage();
