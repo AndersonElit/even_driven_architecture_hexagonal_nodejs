@@ -1,10 +1,5 @@
 const { Kafka } = require('kafkajs');
 
-/*const consumerOpt = {
-    groupId: 'message-consumer-group',
-    autoCommit: true
-};*/
-
 const kafka = new Kafka({
     clientId: 'retry',
     brokers: ['localhost:9092']
@@ -16,7 +11,9 @@ const topic = 'message-topic';
 
 class MessageConsumer {
 
-    constructor() {}
+    constructor() {
+        this.event = null;
+    }
 
     async consume() {
         await consumer.connect();
@@ -25,13 +22,19 @@ class MessageConsumer {
         await consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
                 try {
-                    console.log('Received message:', message.value.toString());
+                    const event = JSON.parse(message.value);
+                    console.log('Event: ', event);
+                    this.event = event;
                 } catch (error) {
                     console.error('Error processing message:', error);
                 }
             }
         });
 
+    }
+
+    async getEvent() {
+        return this.event;
     }
 
     async connect() {
