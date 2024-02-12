@@ -17,12 +17,15 @@ module.exports = async function (context, req) {
     const response = await messageClient.getMessage();
 
     await producer.emitEvent(endpoint, response);
-    const event = consumer.getEvent();
+
+    //await new Promise(resolve => setTimeout(resolve, 30000));
+
+    //const event = await consumer.getEvent();
 
     await producer.disconnect();
     await consumer.disconnect();
 
     context.res = {
-        body: event
+        body: response
     };
 }

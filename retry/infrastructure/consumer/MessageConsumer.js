@@ -5,7 +5,7 @@ const kafka = new Kafka({
     brokers: ['localhost:9092']
 });
 
-const consumer = kafka.consumer({ groupId: 'message-consumer-group' });
+const consumer = kafka.consumer({ groupId: 'message-consumer-group-2' });
 
 const topic = 'message-topic';
 
