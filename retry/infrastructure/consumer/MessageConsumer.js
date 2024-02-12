@@ -1,27 +1,45 @@
-const kafka = require('kafka-node');
+const { Kafka } = require('kafkajs');
 
-const consumerOpt = {
+/*const consumerOpt = {
     groupId: 'message-consumer-group',
     autoCommit: true
-};
+};*/
+
+const kafka = new Kafka({
+    clientId: 'retry',
+    brokers: ['localhost:9092']
+});
+
+const consumer = kafka.consumer({ groupId: 'message-consumer-group' });
 
 const topic = 'message-topic';
 
 class MessageConsumer {
-    constructor() {
-        this.consumer = new kafka.ConsumerGroup(consumerOpt, topic);
-    }
 
-    consume() {
-        this.consumer.on('message', async (message) => {
-            try {
-                const payload = JSON.parse(message.value);
-                const { endpoint, response } = payload;
-                console.log('Event: ', endpoint);
-            } catch (error) {
-                console.error('Error: ', error);
+    constructor() {}
+
+    async consume() {
+        await consumer.connect();
+        await consumer.subscribe({ topic });
+
+        await consumer.run({
+            eachMessage: async ({ topic, partition, message }) => {
+                try {
+                    console.log('Received message:', message.value.toString());
+                } catch (error) {
+                    console.error('Error processing message:', error);
+                }
             }
         });
+
+    }
+
+    async connect() {
+        await consumer.connect();
+    }
+
+    async disconnect() {
+        await consumer.disconnect();
     }
 
 }

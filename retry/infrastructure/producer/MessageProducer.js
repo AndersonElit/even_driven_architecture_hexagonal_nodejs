@@ -1,42 +1,42 @@
-const kafka = require('kafka-node');
+const { Kafka } = require('kafkajs');
+const Event = require('../../domain/model/Event');
 
-const kafkaClientOpt = {
-    kafkaHost: 'localhost:9092'
-};
+const kafka = new Kafka({
+    clientId: 'retry',
+    brokers: ['localhost:9092']
+});
 
-const producerOpt = {
-    requireAcks: 1
-};
+const producer = kafka.producer();
 
 const topic = 'message-topic';
 
 class MessageProducer {
-    constructor() {
-        this.producer = new kafka.Producer(new kafka.KafkaClient(kafkaClientOpt), producerOpt);
+
+    constructor() {}
+
+    async emitEvent(endpoint, response) {
+
+        const payload = new Event(endpoint, response, Date.now());
+
+        try {
+            await producer.send({
+                topic,
+                messages: [{ value: JSON.stringify(payload) }]
+            });
+            console.log('The event was sent sussessfully.');
+        } catch (error) {
+            console.log('Error sending event: ', error);
+        }
     }
 
-    emitEvent(endpoint, response) {
-        const payload = {
-            endpoint,
-            response,
-            timestamp: Date.now()
-        };
-
-        const message = [
-            {
-                topic: topic,
-                message: JSON.stringify(payload)
-            }
-        ];
-
-        this.producer.send(message, (error, data) => {
-            if (error) {
-                console.error('Error sending event:', error);
-            } else {
-                console.log('The event was sent succesfully: ', data);
-            }
-        });
+    async connect() {
+        await producer.connect();
     }
+
+    async disconnect() {
+        await producer.disconnect();
+    }
+
 }
 
 module.exports = MessageProducer;
