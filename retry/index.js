@@ -18,14 +18,12 @@ module.exports = async function (context, req) {
 
     await producer.emitEvent(endpoint, response);
 
-    //await new Promise(resolve => setTimeout(resolve, 30000));
-
-    //const event = await consumer.getEvent();
+    const event = await consumer.getEvent();
 
     await producer.disconnect();
     await consumer.disconnect();
 
     context.res = {
-        body: response
+        body: event
     };
 }

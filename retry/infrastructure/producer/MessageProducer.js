@@ -2,7 +2,7 @@ const { Kafka } = require('kafkajs');
 const Event = require('../../domain/model/Event');
 
 const kafka = new Kafka({
-    clientId: 'retry',
+    clientId: 'c98e412f-91fd-4911-871c-0f6e91f4227e',
     brokers: ['localhost:9092']
 });
 
