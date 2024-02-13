@@ -23,7 +23,7 @@ class MessageProducer {
                 topic,
                 messages: [{ value: JSON.stringify(payload) }]
             });
-            console.log('The event was sent sussessfully.');
+            console.log('The event was sent successfully.');
         } catch (error) {
             console.log('Error sending event: ', error);
         }

@@ -31,8 +31,8 @@ class MessageConsumer {
         try {
             const event = JSON.parse(message.value);
             console.log('Event: ', event);
-            this.emittedEvent = event;
-            this.resolveEventPromise(event);
+            this.emmitedEvent = event;
+            this.resolveEvent(event);
         } catch (error) {
             console.error('Error processing message:', error);
         }
