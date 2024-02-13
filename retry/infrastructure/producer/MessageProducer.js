@@ -1,4 +1,5 @@
 const { Kafka } = require('kafkajs');
+const { format } = require('date-fns');
 const Event = require('../../domain/model/Event');
 
 const kafka = new Kafka({
@@ -16,7 +17,10 @@ class MessageProducer {
 
     async emitEvent(endpoint, response) {
 
-        const payload = new Event(endpoint, response, Date.now());
+        const dateNow = Date.now();
+        const formattedDate = format(new Date(dateNow), 'yyyy-MM-dd HH:mm:ss');
+
+        const payload = new Event(endpoint, response, formattedDate);
 
         try {
             await producer.send({
