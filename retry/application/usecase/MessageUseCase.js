@@ -26,10 +26,6 @@ class MessageUseCase {
 
     }
 
-    async retry() {
-
-    }
-
 }
 
 module.exports = MessageUseCase;
