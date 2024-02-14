@@ -20,7 +20,11 @@ class MessageProducer {
         const dateNow = Date.now();
         const formattedDate = format(new Date(dateNow), 'yyyy-MM-dd HH:mm:ss');
 
-        const payload = new Event(endpoint, response, formattedDate);
+        const payload = Event.builder()
+            .endpoint(endpoint)
+            .response(response)
+            .timestamp(formattedDate)
+            .build();
 
         try {
             await producer.send({
