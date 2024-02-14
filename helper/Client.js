@@ -1,6 +1,7 @@
 const axios = require('axios');
+const Response = require('./response/Response');
 
-class GenericClient {
+class Client {
 
     constructor() {}
 
@@ -11,7 +12,11 @@ class GenericClient {
             data: request.body,
             headers: request.headers
         }).then(response => {
-            return response.data;
+            const res = Response.builder()
+                .status(response.status)
+                .body(response.data)
+                .build();
+            return res;
         }).catch(error => {
             console.error('There was a problem with your request:', error);
             throw error;
@@ -20,7 +25,7 @@ class GenericClient {
 
 }
 
-module.exports = GenericClient;
+module.exports = Client;
 
 /**
  * request api POST

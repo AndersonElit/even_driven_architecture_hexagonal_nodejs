@@ -4,6 +4,6 @@ docker run -it --name kafka-zkless -p 9092:9092 -e LOG_DIR=/tmp/logs quay.io/str
 # create kafka topic and emit first message
 ./kafka-console-producer.sh --broker-list localhost:9092 --topic message-topic
 
-use kafka consumer into the container:
+# use kafka consumer into the container
 cd bin/
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic message-topic --from-beginning

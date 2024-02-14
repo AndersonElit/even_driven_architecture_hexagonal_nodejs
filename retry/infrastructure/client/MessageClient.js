@@ -10,7 +10,6 @@ class MessageClient {
     getMessage() {
         return axios.get(this.endpoint)
             .then(response => {
-                
                 this.response = Response.builder()
                     .status(response.status)
                     .body(response.data)

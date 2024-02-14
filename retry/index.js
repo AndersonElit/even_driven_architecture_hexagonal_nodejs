@@ -1,27 +1,16 @@
-const MessageClient = require('./infrastructure/client/MessageClient');
-const MessageProducer = require('./infrastructure/producer/MessageProducer');
-const MessageConsumer = require('./infrastructure/consumer/MessageConsumer');
+
+const { messageUseCase } = require('./application/config/Configuration');
+const Request = require('./domain/request/Request');
+require('dotenv').config();
 
 module.exports = async function (context, req) {
 
-    const producer = new MessageProducer();
-    const consumer = new MessageConsumer();
+    const request = Request.builder()
+                            .url('http://localhost:8082/message')
+                            .method('GET')
+                            .build();
 
-    await producer.connect();
-    await consumer.connect();
-
-    consumer.consume();
-
-    const endpoint = 'http://localhost:8082/message';
-    const messageClient = new MessageClient(endpoint);
-    const response = await messageClient.getMessage();
-
-    await producer.emitEvent(endpoint, response);
-
-    const event = await consumer.getEvent();
-
-    await producer.disconnect();
-    await consumer.disconnect();
+    const event = await messageUseCase.sendBnpBody(request);
 
     context.res = {
         body: event
